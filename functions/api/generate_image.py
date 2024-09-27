@@ -1,6 +1,5 @@
 #!/usr/bin/python
-# Using Titan Image Generator G1
-# This generates realistic images from natural language.
+# Using Titan Image Generator G1, this generates realistic images from natural language.
 
 import json
 import boto3

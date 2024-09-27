@@ -10,5 +10,5 @@ new BedrockSamplesStack(app, 'bedrock-samples-dev', {
     region: 'us-west-2',
   },
   stage: 'dev',
-  prefix: 'sample',
+  prefix: 'zappy-sample',
 })

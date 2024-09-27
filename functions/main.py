@@ -6,6 +6,9 @@
 import json
 from api.version import main as get_version
 from api.generate_image import main as generate_image
+from api.summarize_text import main as summarize_text
+from api.interpret_text import main as interpret_text
+from api.generate_code import main as generate_code
 
 # Common entry point for all lambda functions
 def handler(event, context):
@@ -23,6 +26,12 @@ def handler(event, context):
                 response = get_version(event)
             elif proxy_request == 'POST:/generate-image':
                 response = generate_image(event)
+            elif proxy_request == 'POST:/summarize-text':
+                response = summarize_text(event)
+            elif proxy_request == 'POST:/interpret-text':
+                response = interpret_text(event)
+            elif proxy_request == 'POST:/generate-code':
+                response = generate_code(event)
             else:
                 error = '[404] Route Not Found'
         else:

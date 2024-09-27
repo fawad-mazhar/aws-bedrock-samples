@@ -1,8 +1,8 @@
-import { Aws, Duration, RemovalPolicy, Stack, StackProps, aws_s3objectlambda, CfnOutput} from 'aws-cdk-lib'
+import { Aws, Duration, RemovalPolicy, Stack, StackProps, CfnOutput} from 'aws-cdk-lib'
 import * as s3 from 'aws-cdk-lib/aws-s3'
 import * as lambda from 'aws-cdk-lib/aws-lambda'
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs'
-import { Effect, ManagedPolicy, PolicyStatement, Role, ServicePrincipal, ArnPrincipal, Policy, User, AnyPrincipal } from 'aws-cdk-lib/aws-iam'
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
 import { RestApi, LambdaIntegration, Cors, AuthorizationType} from 'aws-cdk-lib/aws-apigateway'
 import { Construct } from 'constructs'
 import * as path from 'path'
@@ -131,10 +131,11 @@ export class BedrockSamplesStack extends Stack {
     restApi.root.addMethod('GET', new LambdaIntegration(httpRequestLambdaFn), {
       authorizationType: AuthorizationType.NONE
     })
-    const imageApi = restApi.root.addResource('generate-image')
-    imageApi.addMethod('POST', new LambdaIntegration(httpRequestLambdaFn))
 
-
+    restApi.root.addResource('generate-image').addMethod('POST', new LambdaIntegration(httpRequestLambdaFn))
+    restApi.root.addResource('summarize-text').addMethod('POST', new LambdaIntegration(httpRequestLambdaFn))
+    restApi.root.addResource('interpret-text').addMethod('POST', new LambdaIntegration(httpRequestLambdaFn))
+    restApi.root.addResource('generate-code').addMethod('POST', new LambdaIntegration(httpRequestLambdaFn))
 
   } // end constructor
 }
