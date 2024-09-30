@@ -84,16 +84,12 @@ export const createDataSource = async (params: CreateDataSourceProps) => {
           type: 'S3',
           s3Configuration: {
             bucketArn: knowledgeBaseBucketArn,
-            inclusionPrefixes: ['knowledgeBase'],
+            inclusionPrefixes: ['knowledgeBase/'],
           },
         },
       }),
     )
-    if (
-      dataSourceCreateResponse &&
-      dataSourceCreateResponse.dataSource &&
-      dataSourceCreateResponse.dataSource.dataSourceId
-    ) {
+    if ( dataSourceCreateResponse && dataSourceCreateResponse.dataSource && dataSourceCreateResponse.dataSource.dataSourceId ) {
       console.log('DataSource created');
       await ssm.storeParameters({
         name: `/${prefix}/dataSourceId`,

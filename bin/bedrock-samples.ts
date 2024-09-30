@@ -6,7 +6,7 @@ import { BedrockSamplesStack } from '../lib/bedrock-samples-stack';
 const app = new cdk.App();
 new BedrockSamplesStack(app, 'bedrock-samples-dev', {
   env: {
-    account: 'XXXXXXXXXXXX',
+    account: 'XXX',
     region: 'us-west-2',
   },
   stage: 'dev',
