@@ -1,0 +1,18 @@
+{
+  "name": "sample-bedrock-knowledgebase-functions",
+  "version": "0.1.0",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Fawad Mazhar",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-agent": "^3.543.0",
+    "@aws-sdk/client-opensearchserverless": "^3.540.0",
+    "@aws-sdk/client-ssm": "^3.540.0",
+    "@opensearch-project/opensearch": "^2.6.0",
+    "@types/aws-lambda": "^8.10.96",
+    "aws-lambda": "^1.0.7"
+  }
+}

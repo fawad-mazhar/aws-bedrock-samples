@@ -3,7 +3,7 @@
 ## Usage Example
 
 <details>
-  <summary>Generate Image</summary>
+  <summary>Generate Image By Using Titan Image Generator G1</summary>
 
   ### Heading
  
@@ -15,7 +15,7 @@
 </details>
 
 <details>
-  <summary>Summarize Text</summary>
+  <summary>Summarize Text By Using Claude 3 Sonnet</summary>
 
   ### Heading
  
@@ -29,7 +29,7 @@
 </details>
 
 <details>
-  <summary>Interperet Text in Multiple Languages</summary>
+  <summary>Interperet Text in Multiple Languages Using Cohere</summary>
 
   ### Heading
  
@@ -37,11 +37,11 @@
     curl -X POST "$API_URL/interpret-text" \
     --header 'Content-Type: application/json' \
     --data '{"prompt": "Interpret the text below into into French, Spanish, Italian, German, Brazilian Portuguese,\n  Japanese, Korean, Simplified Chinese, and Arabic: \n\nThe customer is having a problem with a printer that is not connecting to the computer. He\ntried restarting both the computer and the printer. \n"}' | jq '.'
+
   ```
 </details>
-
 <details>
-  <summary>Generate Code</summary>
+  <summary>Generate Code Through Llama 2</summary>
 
   ### Heading
  
