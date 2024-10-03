@@ -10,7 +10,7 @@ def main(event):
     prompt = body['prompt']
     print(f"Prompt: {prompt}")
 
-    client = boto3.client("bedrock-runtime", region_name="us-west-2")
+    client = boto3.client("bedrock-runtime")
 
     model_id = "meta.llama2-70b-chat-v1"
 

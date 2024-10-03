@@ -13,10 +13,12 @@ export interface KnowledgeBaseProps extends StackProps {
   account: string
   stage: string
   prefix: string
+  knowledgeBaseEmbeddingModelArn: string
 }
 
 export class KnowledgeBase extends Construct {
 
+  knowledgeBaseBucketArn: string
   knowledgeBaseId: string
   knowledgeBaseArn: string
   collectionArn: string
@@ -45,8 +47,9 @@ export class KnowledgeBase extends Construct {
     })
     
     new CfnOutput(this, `${props.prefix}-${props.account}-kb-${props.stage}-output`, {
+      key: 'knowledgebaseSourceBucket',
       description: "S3 bucket as Amazon Knowledgebase source.",
-      value: `${props.prefix}-${props.account}-assets-${props.stage}`,      
+      value: `${props.prefix}-${props.account}-kb-${props.stage}`,      
     })
 
     // Ensure that the data is uploaded as part of the deployment
@@ -108,24 +111,24 @@ export class KnowledgeBase extends Construct {
     /**
      * Amazon Bedrock Knowledgebase Role
      */
-    const kbRole = new Role(this, `${props.prefix}-${props.account}-kb-role-${props.stage}`, {
+    const kbRole = new Role(this, `${props.prefix}-kb-role-${props.stage}`, {
       assumedBy: new CompositePrincipal(
         new ServicePrincipal('bedrock.amazonaws.com'),
         new ServicePrincipal('lambda.amazonaws.com'),
         new ArnPrincipal(kbCustomResourceRole.roleArn),
       ),
       inlinePolicies: {
-        ['bedrockPolicy']: new PolicyDocument({
+        [`${props.prefix}-bedrock-policy-${props.stage}`]: new PolicyDocument({
           statements: [
             new PolicyStatement({
               resources: [
-                'arn:aws:bedrock:us-west-2::foundation-model/amazon.titan-embed-text-v1',
+                props.knowledgeBaseEmbeddingModelArn,
               ],
               actions: ['bedrock:InvokeModel'],
             }),
           ],
         }),
-        ['aossPolicy']: new PolicyDocument({
+        [`${props.prefix}-aoss-policy-${props.stage}`]: new PolicyDocument({
           statements: [
             new PolicyStatement({
               resources: ['*'],
@@ -150,7 +153,7 @@ export class KnowledgeBase extends Construct {
       memorySize: 512,
       handler: 'handler',
       role: kbCustomResourceRole,
-      entry: path.join(__dirname, '/../functions/ts/request.ts'),
+      entry: path.join(__dirname, '/../functions/ts/cfn-init.ts'),
     });
 
     const kbProvider = new Provider(this, `${props.prefix}-${props.account}-kb-provider-${props.stage}`, {
@@ -169,7 +172,7 @@ export class KnowledgeBase extends Construct {
         knowledgeBaseCustomResourceRole: kbCustomResourceRole.roleArn,
         accessPolicyArns: JSON.stringify([]),
         prefix: props.prefix,
-        knowledgeBaseEmbeddingModelArn: 'arn:aws:bedrock:us-west-2::foundation-model/amazon.titan-embed-text-v1',
+        knowledgeBaseEmbeddingModelArn: props.knowledgeBaseEmbeddingModelArn,
       }
     })
 
@@ -180,6 +183,7 @@ export class KnowledgeBase extends Construct {
     this.collectionName = kb.getAttString('collectionName')
     this.collectionEndpoint = kb.getAttString('collectionEndpoint')
     this.dataSourceId = kb.getAttString('dataSourceId')
+    this.knowledgeBaseBucketArn = kbBucket.bucketArn
 
   } // End constructor
 }

@@ -10,7 +10,7 @@ interface CreateIndexParams {
 }
 export const createIndex = async (params: CreateIndexParams) => {
   const { host, prefix } = params
-  console.log('Creating Index');
+  console.log('Creating OS Index...');
   await new Promise((resolve) => setTimeout(resolve, 60000));
 
   const client = new Client({

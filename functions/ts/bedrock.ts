@@ -1,5 +1,10 @@
 import { randomUUID } from 'crypto'
-import { BedrockAgentClient, CreateKnowledgeBaseCommand, CreateDataSourceCommand, CreateKnowledgeBaseCommandOutput, DeleteKnowledgeBaseCommand } from '@aws-sdk/client-bedrock-agent';
+import { BedrockAgentClient, 
+  CreateKnowledgeBaseCommand, 
+  CreateDataSourceCommand, 
+  CreateKnowledgeBaseCommandOutput, 
+  DeleteKnowledgeBaseCommand 
+} from '@aws-sdk/client-bedrock-agent';
 import * as ssm from './ssm'
 
 const AWS_REGION = process.env.AWS_REGION;
@@ -13,7 +18,7 @@ interface CreateKnowledgeBaseProps {
 }
 
 export const createKnowledgeBase = async (params: CreateKnowledgeBaseProps): Promise<CreateKnowledgeBaseCommandOutput> => {
-  console.log('Creating KnowledgeBase');
+  console.log('Creating KnowledgeBase...');
   const { knowledgeBaseRoleArn, prefix, knowledgeBaseEmbeddingModelArn, collectionArn } = params;
   await new Promise((resolve) => setTimeout(resolve, 60000));
   try {
@@ -43,7 +48,7 @@ export const createKnowledgeBase = async (params: CreateKnowledgeBaseProps): Pro
       }),
     );
     if ( data && data.knowledgeBase && data.knowledgeBase.knowledgeBaseId && data.knowledgeBase.knowledgeBaseArn ) {
-      console.log('KnowledgeBase created');
+      console.log('KnowledgeBase created!');
       await ssm.storeParameters({
         name: `/${prefix}/knowledgeBaseId`,
         value: data.knowledgeBase.knowledgeBaseId,
@@ -54,13 +59,13 @@ export const createKnowledgeBase = async (params: CreateKnowledgeBaseProps): Pro
       });
       return data;
     } else {
-      throw new Error('Failed to create Knowledge Base');
+      throw new Error('Failed to create Knowledge Base.');
     }
   } catch (error) {
     if (error instanceof Error) {
       console.error(error);
     }
-    throw new Error('Failed to create Knowledge Base');
+    throw new Error('Failed to create Knowledge Base.');
   }
 };
 
@@ -71,7 +76,7 @@ interface CreateDataSourceProps {
 }
 
 export const createDataSource = async (params: CreateDataSourceProps) => {
-  console.log('Creating DataSource');
+  console.log('Creating DataSource...');
   const { knowledgeBaseBucketArn, knowledgeBaseId, prefix } =
     params;
   try {
@@ -90,20 +95,20 @@ export const createDataSource = async (params: CreateDataSourceProps) => {
       }),
     )
     if ( dataSourceCreateResponse && dataSourceCreateResponse.dataSource && dataSourceCreateResponse.dataSource.dataSourceId ) {
-      console.log('DataSource created');
+      console.log('DataSource created!');
       await ssm.storeParameters({
         name: `/${prefix}/dataSourceId`,
         value: dataSourceCreateResponse.dataSource.dataSourceId,
       });
       return dataSourceCreateResponse;
     } else {
-      throw new Error('Failed to create data source')
+      throw new Error('Failed to create data source.')
     }
   } catch (error) {
     if (error instanceof Error) {
       console.error(error);
     }
-    throw new Error('Failed to create data source')
+    throw new Error('Failed to create data source.')
   }
 };
 

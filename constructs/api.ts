@@ -4,6 +4,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3'
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
 import * as lambda from 'aws-cdk-lib/aws-lambda'
+import { LambdaDestination } from 'aws-cdk-lib/aws-s3-notifications'
 import { RestApi, LambdaIntegration, Cors, AuthorizationType} from 'aws-cdk-lib/aws-apigateway'
 import * as path from 'path'
 
@@ -11,6 +12,15 @@ export interface ApiProps extends StackProps {
   account: string
   stage: string
   prefix: string
+  knowledgeBaseFoundationModelArn: string
+  knowledgeBaseBucketArn: string
+  knowledgeBaseId: string
+  knowledgeBaseArn: string
+  collectionArn: string
+  collectionId: string
+  collectionName: string
+  collectionEndpoint: string
+  bedrockDataSourceId: string
 }
 
 export class Api extends Construct {
@@ -37,12 +47,6 @@ export class Api extends Construct {
       }],
     })
     
-    new CfnOutput(this, `${props.prefix}-${props.account}-assets-${props.stage}-output`, {
-      description: "S3 bucket for AI images.",
-      value: `${props.prefix}-${props.account}-assets-${props.stage}`,      
-    })
-
-
     /**
      * API GW Defintion
      */
@@ -68,7 +72,7 @@ export class Api extends Construct {
         allowCredentials: true
       }
     })
-
+    
     /**
      * API GW λ Function
      * This λ Function is used to ....
@@ -88,6 +92,9 @@ export class Api extends Construct {
         STAGE: props.stage,
         API_URL: `https://${restApi.restApiId!}.execute-api.${Aws.REGION}.amazonaws.com/${props.stage}/`,
         ASSETS_BUCKET: assetsBucket.bucketName,
+        DATA_SOURCE_ID: props.bedrockDataSourceId,
+        KNOWLEDGE_BASE_ID: props.knowledgeBaseId,
+        KNOWLEDGE_BASE_MODEL_ARN: props.knowledgeBaseFoundationModelArn,
       },
       code: lambda.Code.fromAsset(path.join(__dirname, '/../functions/py'), {
         bundling: {
@@ -121,11 +128,21 @@ export class Api extends Construct {
     }))
     httpRequestLambdaFn.addToRolePolicy(new PolicyStatement({
       actions: [
-        'bedrock:Invoke*'
+        'bedrock:Invoke*',
+        'bedrock:Retrieve*',
       ],
       resources: ['*']
     }))
 
+
+    const kbBucket = s3.Bucket.fromBucketArn(this, `${props.prefix}-bedrock-Kb-bucket-arn-${props.stage}`, props.knowledgeBaseBucketArn)
+    kbBucket.grantRead(httpRequestLambdaFn)
+
+    kbBucket.addEventNotification(
+      s3.EventType.OBJECT_CREATED, 
+      new LambdaDestination(httpRequestLambdaFn),
+      { prefix: 'knowledgeBase' },
+    )
     
     /**
      * API GW Methods and Routes
@@ -146,5 +163,9 @@ export class Api extends Construct {
     restApi.root.addResource('interpret-text').addMethod('POST', new LambdaIntegration(httpRequestLambdaFn))
     restApi.root.addResource('generate-code').addMethod('POST', new LambdaIntegration(httpRequestLambdaFn))
 
+    /**
+     * KnowledgeBase Query
+     */
+    restApi.root.addResource('knowledgebase-query').addMethod('POST', new LambdaIntegration(httpRequestLambdaFn))
   }
 }

@@ -9,6 +9,8 @@ from api.generate_image import main as generate_image
 from api.summarize_text import main as summarize_text
 from api.interpret_text import main as interpret_text
 from api.generate_code import main as generate_code
+from api.on_s3_object_created import main as on_s3_object_created
+from api.knowledgebase_query import main as knowledgebase_query
 
 # Common entry point for all lambda functions
 def handler(event, context):
@@ -32,8 +34,18 @@ def handler(event, context):
                 response = interpret_text(event)
             elif proxy_request == 'POST:/generate-code':
                 response = generate_code(event)
+            elif proxy_request == 'POST:/knowledgebase-query':
+                response = knowledgebase_query(event)
             else:
                 error = '[404] Route Not Found'
+        elif 'Records' in event:
+            record = event['Records'][0]
+            if 's3' in record:
+                # Event coming from S3
+                response = on_s3_object_created(event)
+            else:
+                print('[UNKNOWN]', json.dumps(event))
+                response = {}    
         else:
             print('[UNKNOWN]', json.dumps(event))
             response = {}

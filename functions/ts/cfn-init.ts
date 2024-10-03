@@ -1,12 +1,12 @@
-import { CdkCustomResourceEvent, CdkCustomResourceResponse, Context } from 'aws-lambda'
+import * as ƛ from 'aws-lambda'
 import * as br from './bedrock'
 import * as ssm from './ssm'
 import { createIndex } from './openSearch'
 import * as oss from './openSearchServerless'
 
-let response: CdkCustomResourceResponse = {};
+let response: ƛ.CdkCustomResourceResponse = {};
 
-export const handler = async (event: CdkCustomResourceEvent, context: Context): Promise<CdkCustomResourceResponse> => {
+export const handler = async (event: ƛ.CdkCustomResourceEvent, context: ƛ.Context): Promise<ƛ.CdkCustomResourceResponse> => {
   console.info('event: ', event)
 
   const requestType = event.RequestType
@@ -14,7 +14,6 @@ export const handler = async (event: CdkCustomResourceEvent, context: Context): 
 
   switch (requestType) {
     case 'Create':
-      console.log('Create');
       await oss.createAccessPolicy({
         prefix: requestProperties.prefix,
         knowledgeBaseRoleArn: requestProperties.knowledgeBaseRoleArn,
@@ -60,7 +59,7 @@ export const handler = async (event: CdkCustomResourceEvent, context: Context): 
 
       break
     case 'Update':
-      console.log('Update KnowledgeBase - NOOP');
+      console.log('Updating KnowledgeBase...');
       const collectionInfo = await oss.updateCollection({
         prefix: requestProperties.prefix,
       })
@@ -79,7 +78,7 @@ export const handler = async (event: CdkCustomResourceEvent, context: Context): 
       response.Reason = 'UpdateKnowledgeBase successful';
       break
     case 'Delete':
-      console.log('Delete KnowledgeBase');
+      console.log('Deleteing KnowledgeBase...');
       await oss.deleteAccessPolicy({
         prefix: requestProperties.prefix,
       })
@@ -120,7 +119,7 @@ export const handler = async (event: CdkCustomResourceEvent, context: Context): 
       });
 
       response.Status = 'SUCCESS';
-      response.Reason = 'DeleteKnowledgeBase successful';
+      response.Reason = 'Delete KnowledgeBase successful';
       break;
   }
 

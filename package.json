@@ -17,11 +17,11 @@
   ],
   "scripts": {
     "install": "cd functions/ts && npm install",
-    "bootstrap:dev": "cdk bootstrap -v --profile {profile_name} --region us-west-2 --context stage=dev",
-    "synth:dev": "npx cdk -v --profile {profile_name} --region us-west-2 synth bedrock-samples-dev",
-    "diff:dev": "npx cdk -v --profile {profile_name} --region us-west-2 diff bedrock-samples-dev",
-    "deploy:dev": "npm run synth:dev && npx cdk -v --profile {profile_name} --region us-west-2 deploy bedrock-samples-dev",
-    "destroy:dev": "npx cdk -v --profile {profile_name} --region us-west-2 destroy bedrock-samples-dev"
+    "bootstrap:dev": "cdk bootstrap -v --profile nlaclassic --region us-west-2 --context stage=dev",
+    "synth:dev": "npx cdk -v --profile nlaclassic --region us-west-2 synth bedrock-samples-dev",
+    "diff:dev": "npx cdk -v --profile nlaclassic --region us-west-2 diff bedrock-samples-dev",
+    "deploy:dev": "npm run synth:dev && npx cdk -v --profile nlaclassic --region us-west-2 deploy bedrock-samples-dev",
+    "destroy:dev": "npx cdk -v --profile nlaclassic --region us-west-2 destroy bedrock-samples-dev"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

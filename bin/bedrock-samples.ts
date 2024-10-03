@@ -6,9 +6,11 @@ import { BedrockSamplesStack } from '../lib/bedrock-samples-stack';
 const app = new cdk.App();
 new BedrockSamplesStack(app, 'bedrock-samples-dev', {
   env: {
-    account: 'XXX',
+    account: '228904764948',
     region: 'us-west-2',
   },
   stage: 'dev',
-  prefix: 'zappy-sample',
+  prefix: 'zizel-intel',
+  knowledgeBaseEmbeddingModelArn: 'arn:aws:bedrock:us-west-2::foundation-model/amazon.titan-embed-text-v1',
+  knowledgeBaseFoundationModelArn: "arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-v2"
 })

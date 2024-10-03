@@ -24,7 +24,7 @@ interface CreateEncryptionSecurityPolicyParams {
 export const createEncryptionSecurityPolicy = async (
   params: CreateEncryptionSecurityPolicyParams,
 ) => {
-  console.log('Creating Encryption SecurityPolicy');
+  console.log('Creating Encryption SecurityPolicy...');
   const { prefix } = params;
   try {
     const data = await openSearchServerlessClient.send(
@@ -48,7 +48,7 @@ export const createEncryptionSecurityPolicy = async (
     if (error instanceof Error) {
       console.error(error);
     }
-    throw new Error('Failed to create Encryption SecurityPolicy');
+    throw new Error('Failed to create Encryption SecurityPolicy.');
   }
 };
 
@@ -59,7 +59,7 @@ interface CreateNetworkSecurityPolicyParams {
 export const createNetworkSecurityPolicy = async (
   params: CreateNetworkSecurityPolicyParams,
 ) => {
-  console.log('Creating Network SecurityPolicy')
+  console.log('Creating Network SecurityPolicy...')
   const { prefix } = params;
   try {
     const policy = [
@@ -90,7 +90,7 @@ export const createNetworkSecurityPolicy = async (
     if (error instanceof Error) {
       console.error(error);
     }
-    throw new Error('Failed to create SecurityPolicy');
+    throw new Error('Failed to create SecurityPolicy.');
   }
 };
 
@@ -102,7 +102,7 @@ interface CreateAccessPolicyParams {
 }
 
 export const createAccessPolicy = async (params: CreateAccessPolicyParams) => {
-  console.log('Creating AccessPolicy')
+  console.log('Creating AccessPolicy...')
   const { prefix, knowledgeBaseRoleArn, knowledgeBaseCustomResourceRole, accessPolicyArns } = params
 
   const parsedArns: string[] = JSON.parse(accessPolicyArns)
@@ -155,7 +155,7 @@ export const createAccessPolicy = async (params: CreateAccessPolicyParams) => {
       console.error(error);
     }
   }
-  throw new Error('Failed to create AccessPolicy');
+  throw new Error('Failed to create AccessPolicy.');
 };
 
 interface CreateCollectionParams {
@@ -164,7 +164,7 @@ interface CreateCollectionParams {
 
 export const createCollection = async ( params: CreateCollectionParams ): Promise<CollectionDetail> => {
   const { prefix } = params
-  console.log('Creating Collection');
+  console.log('Creating Collection...');
   try {
     const createCollectionResponse = await openSearchServerlessClient.send(
       new CreateCollectionCommand({
@@ -217,7 +217,7 @@ export const createCollection = async ( params: CreateCollectionParams ): Promis
       attempts++
     }
 
-    throw new Error('Failed to create collection: Timeout exceeded');
+    throw new Error('Failed to create collection: Timeout exceeded!');
   } catch (error) {
     if (error instanceof Error) {
       console.error(error)
@@ -232,7 +232,7 @@ interface DeleteAccessPolicyParams {
 }
 
 export const deleteAccessPolicy = async (params: DeleteAccessPolicyParams) => {
-  console.log('Deleting AccessPolicy')
+  console.log('Deleting AccessPolicy.')
   const { prefix } = params;
   try {
     await openSearchServerlessClient.send(
@@ -257,7 +257,7 @@ interface DeleteSecurityPolicyParams {
 export const deleteSecurityPolicy = async (
   params: DeleteSecurityPolicyParams,
 ) => {
-  console.log('Deleting AccessPolicy');
+  console.log('Deleting AccessPolicy.');
   const { prefix, type } = params;
   try {
     await openSearchServerlessClient.send(
@@ -279,7 +279,7 @@ interface DeleteCollectionParams {
 }
 
 export const deleteCollection = async (params: DeleteCollectionParams) => {
-  console.log('Deleting Collection');
+  console.log('Deleting Collection.');
   const { prefix } = params;
 
   const collectionId = await ssm.retrieveParameters({
@@ -296,7 +296,7 @@ export const deleteCollection = async (params: DeleteCollectionParams) => {
     if (error instanceof Error) {
       console.error(error);
     }
-    throw new Error('Failed to delete Collection');
+    throw new Error('Failed to delete Collection.');
   }
 }
 
@@ -305,7 +305,7 @@ interface updateCollectionParams {
 }
 
 export const updateCollection = async (params: updateCollectionParams) => {
-  console.log('Updating Collection');
+  console.log('Updating Collection...');
   const { prefix } = params
   try {
     const collectionId = await ssm.retrieveParameters({
@@ -329,6 +329,6 @@ export const updateCollection = async (params: updateCollectionParams) => {
     if (error instanceof Error) {
       console.error(error);
     }
-    throw new Error('Failed to update Collection');
+    throw new Error('Failed to update Collection.');
   }
 };

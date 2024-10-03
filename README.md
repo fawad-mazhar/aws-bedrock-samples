@@ -5,8 +5,6 @@
 <details>
   <summary>Generate Image By Using Titan Image Generator G1</summary>
 
-  ### Heading
- 
   ```bash
     curl -X POST "$API_URL/generate-image" \
     --header 'Content-Type: application/json' \
@@ -17,8 +15,6 @@
 <details>
   <summary>Summarize Text By Using Claude 3 Sonnet</summary>
 
-  ### Heading
- 
   ```bash
     curl -X POST "$API_URL/summarize-text" \
     --header 'Content-Type: application/json' \
@@ -31,8 +27,6 @@
 <details>
   <summary>Interperet Text in Multiple Languages Using Cohere</summary>
 
-  ### Heading
- 
   ```bash
     curl -X POST "$API_URL/interpret-text" \
     --header 'Content-Type: application/json' \
@@ -43,11 +37,27 @@
 <details>
   <summary>Generate Code Through Llama 2</summary>
 
-  ### Heading
- 
   ```bash
     curl -X POST "$API_URL/generate-code" \
     --header 'Content-Type: application/json' \
     --data '{"prompt": "Generate code to compute md5sum of string in javascript"}' | jq '.'
   ```
 </details>
+<details>
+  <summary>Ask Questions from Bedrock Knowledge Base</summary>
+
+  ```bash
+    curl -X POST "$API_URL/knowledgebase-query" \
+    --header 'Content-Type: application/json' \
+    --data '{"prompt": "What is a load balancer?"}' | jq '.'
+  ```
+
+  Keep an active conversion session by reusing the sessionId. This way Amazon Bedrock maintains the context and knowledge from the previous interactions.
+  ```bash
+  curl -X POST "$API_URL/knowledgebase-query" \
+  --header 'Content-Type: application/json' \
+  --data '{"prompt": "try again.", "session_id": "<insert-session-id>"}' | jq '.'
+  ```
+
+</details>
+
