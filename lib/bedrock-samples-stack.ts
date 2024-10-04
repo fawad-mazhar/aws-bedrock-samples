@@ -1,4 +1,4 @@
-import { Aws, Duration, RemovalPolicy, Stack, StackProps, CfnOutput, CustomResource} from 'aws-cdk-lib'
+import { Stack, StackProps } from 'aws-cdk-lib'
 import { Construct } from 'constructs'
 import { KnowledgeBase } from '../constructs/knowledgebase'
 import { Api } from '../constructs/api'
@@ -22,7 +22,7 @@ export class BedrockSamplesStack extends Stack {
       knowledgeBaseEmbeddingModelArn: props.knowledgeBaseEmbeddingModelArn
     })
 
-    const api = new Api(this, `${props.prefix}-bedrock-api-${props.stage}`, {
+    new Api(this, `${props.prefix}-bedrock-api-${props.stage}`, {
       account: this.account,
       stage: props.stage,
       prefix: props.prefix,

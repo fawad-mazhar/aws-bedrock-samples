@@ -1,4 +1,4 @@
-import { Aws, Duration, RemovalPolicy, Stack, StackProps, CfnOutput, CustomResource} from 'aws-cdk-lib'
+import { Duration, RemovalPolicy, Stack, StackProps, CfnOutput, CustomResource } from 'aws-cdk-lib'
 import * as s3 from 'aws-cdk-lib/aws-s3'
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment'
 import * as lambda from 'aws-cdk-lib/aws-lambda'
@@ -146,8 +146,8 @@ export class KnowledgeBase extends Construct {
      * CFN Virgin Init λ Function
      * This λ function creates necessary resources for a virgin account/region
     */
-    const kbCustomResourceFn = new NodejsFunction(this, `${props.prefix}-${props.account}-kb-custom-resource-fn-${props.stage}`, {
-      functionName: `${props.prefix}-${props.account}-kb-custom-resource-fn-${props.stage}`,
+    const virginInitFn = new NodejsFunction(this, `${props.prefix}-${props.account}-virgin-init-fn-${props.stage}`, {
+      functionName: `${props.prefix}-${props.account}-virgin-init-fn-${props.stage}`,
       runtime: lambda.Runtime.NODEJS_18_X,
       timeout: Duration.seconds(900),
       memorySize: 512,
@@ -156,8 +156,8 @@ export class KnowledgeBase extends Construct {
       entry: path.join(__dirname, '/../functions/ts/cfn-init.ts'),
     });
 
-    const kbProvider = new Provider(this, `${props.prefix}-${props.account}-kb-provider-${props.stage}`, {
-      onEventHandler: kbCustomResourceFn,
+    const virginInitProvider = new Provider(this, `${props.prefix}-${props.account}-virgin-init-provider-${props.stage}`, {
+      onEventHandler: virginInitFn,
       logRetention: RetentionDays.ONE_WEEK,
     })
 
@@ -165,7 +165,7 @@ export class KnowledgeBase extends Construct {
      * CFN Init
      */
     const kb = new CustomResource( this, `${props.prefix}-${props.account}-kb-custom-resource-${props.stage}`, {
-      serviceToken: kbProvider.serviceToken,
+      serviceToken: virginInitProvider.serviceToken,
       properties: {
         knowledgeBaseBucketArn: kbBucket.bucketArn,
         knowledgeBaseRoleArn: kbRole.roleArn,

@@ -1,4 +1,50 @@
-# AWS Bedrock Samples
+# AWS Bedrock Foundation Models Playground & RAG Solution
+---
+
+Fawad Mazhar <fawadmazhar@hotmail.com> 2024
+
+---
+
+This project showcases the versatility and power of Amazon Bedrock by applying popular foundation models to various tasks, from image generation to code generation. It also demonstrates how to build a complete RAG solution using Knowledge Bases, highlighting the capabilities of cloud-native technologies for building advanced AI applications.
+
+
+## Project Overview
+This project demonstrates how to leverage Amazon Bedrock to integrate and use popular foundation models, including:
+
+  - Claude 3 Sonnet
+  - Cohere
+  - Llama 2
+  - Titan Image Generator
+
+The models are applied to a variety of tasks, such as:
+
+  - Image Generation
+  - Text Summarization
+  - Text Interpretation
+  - JavaScript Code Generation
+
+In addition to showcasing these tasks, the project also provides an end-to-end Retrieval-Augmented Generation (RAG) solution using Knowledge Bases. By combining domain-specific knowledge retrieval with generative AI models, this project highlights the power and simplicity of Amazon Bedrock.
+
+
+## Architecture
+The solution consists of two main architectural components:
+
+#### Foundation Model Service Architecture
+
+1. API Gateway receives requests for various AI tasks
+2. Lambda functions process requests and interact with Bedrock
+3. Foundation models perform requested operations
+4. Results are returned via API Gateway
+
+#### RAG Solution Architecture
+
+1. Documents are uploaded to S3
+2. Lambda functions process and chunk the documents
+3. Embeddings are generated using Amazon Titan
+4. Vectors are stored in OpenSearch Serverless
+5. Query processing is handled by Lambda functions
+6. Foundation models are accessed through Amazon Bedrock
+7. Results are returned via API Gateway
 
 ## Usage Example
 
@@ -61,3 +107,40 @@
 
 </details>
 
+
+## Deployment
+<details>
+  <summary>Pre-requisites</summary>
+
+  - AWS CLI Installed & Configured 👉 [Get help here](https://aws.amazon.com/cli/)
+  - Node.js 18.x+
+  - Python 3.8 or later
+  - Docker
+  - 🔧 AWS CDK 👉 [Get help here](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html) 
+</details>
+
+<details>
+  <summary>Installation</summary>
+  Run command:
+
+  ```bash
+  npm install
+  npm run bootstrap:dev
+  ```
+</details>
+  
+<details>
+  <summary>Deploying (us-west-2)</summary>
+  Run command:
+
+  ```bash
+  npm run deploy:dev
+  ```
+</details>
+
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
+## Disclaimer
+This is a demonstration project and should be carefully reviewed before using in a production environment. Cost considerations should be evaluated when using foundation models and AWS services at scale.
