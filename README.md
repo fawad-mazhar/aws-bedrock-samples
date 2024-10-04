@@ -1,4 +1,4 @@
-# AWS Bedrock Foundation Models Playground & RAG Solution
+# Amazon Bedrock Foundation Models Playground & RAG Solution
 ---
 
 Fawad Mazhar <fawadmazhar@hotmail.com> 2024
